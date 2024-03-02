@@ -8,6 +8,7 @@ import {
 import { app } from '#/index';
 import { Utils } from '#utils/Utils';
 import { load } from 'cheerio';
+import {inspect} from "util";
 
 export class Nyaa implements IProvider {
   readonly name: string;
@@ -81,6 +82,11 @@ export class Nyaa implements IProvider {
     const showNameRegex = /\]\s*([^[(\]\[]+[^)\]\[])\s*(?:(?<!Season|[Ss]\d+|Arc)\(|\[|\])/;
     const filteredWords = ['ova', 'ovas', 'special', 'specials', 'series', 'complete', 'collection'];
     const filteredChars = ['+'];
+
+    const filteredShowNameMatch = originalTitle.match(showNameRegex);
+    if (filteredShowNameMatch == undefined || filteredShowNameMatch == null) {
+      return originalTitle;
+    }
 
     const filteredShowName = originalTitle.match(showNameRegex)?.[1].replace(
       new RegExp(`\\b(?:${filteredWords.join('|')})\\b`, 'gi'),
